@@ -74,6 +74,7 @@ public class GameService {
 
         if (game.isWinner()) {
             game.setWinner(Winner.USER);
+            board.setStep(board.getStep() + 1);
         } else
         if (!game.isCompleted()) {
             board.makeMove(gameStrategy.getMove(board), configuration.getFigureMachine());
@@ -91,7 +92,8 @@ public class GameService {
     public Game cancelMove(String sessionId) {
 
         Game game = gameRepository.getBySessionId(sessionId);
-        Board board = boardRepository.getByGameIdAndStep(game.getId(), game.getBoard().getStep() - 1);
+        int step = game.getBoard().getStep() - 1;
+        Board board = boardRepository.getByGameIdAndStep(game.getId(), step);
         if (board == null) {
             throw new CancelMoveException();
         }
