@@ -92,6 +92,10 @@ public class GameService {
     public Game cancelMove(String sessionId) {
 
         Game game = gameRepository.getBySessionId(sessionId);
+        if (game.isCompleted()) {
+            game.setCompleted(false);
+            game.setWinner(null);
+        }
         int step = game.getBoard().getStep() - 1;
         Board board = boardRepository.getByGameIdAndStep(game.getId(), step);
         if (board == null) {
